@@ -20,12 +20,12 @@ module.exports = {
     // },
 
     staging: {
-        client: process.env.DB_CLIENT,
+        client: 'postgresql',
         connection: {
             // host: '127.0.0.1',
-            database: process.env.DATABASE,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASSWORD,
+            database: 'hospital',
+            user: 'postgres',
+            password:'12345'
         },
         pool: {
             min: 2,
