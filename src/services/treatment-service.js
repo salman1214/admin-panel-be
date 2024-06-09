@@ -15,7 +15,7 @@ exports.createTreatment = async (body) => {
 
 exports.getAllTreatments = async () => {
     try {
-        const treatments = await Treatment.query().withGraphFetched('prescription');
+        const treatments = await Treatment.query().withGraphFetched('[prescription, patient.user]');
         return {
             status: 200,
             message: "All treatments fetched successfully",

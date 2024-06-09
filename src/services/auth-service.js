@@ -4,11 +4,11 @@ const jwt = require('jsonwebtoken');
 const Doctor = require("../models/Doctor");
 const Patient = require("../models/Patient");
 
-exports.rejister = async (body) => {
+exports.register = async (body) => {
     try {
         const userExists = await User.query().findOne({ email: body.email });
         if (userExists) return { status: 400, message: 'Email already exists' };
-        
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(body.password, salt);
         const userInfo = {
@@ -20,7 +20,7 @@ exports.rejister = async (body) => {
         }
 
         const newUser = await User.query().insert(userInfo);
-        
+
         if (body.role.toLowerCase() === 'doctor') {
             await Doctor.query().insert({
                 user_id: newUser.id,
@@ -29,7 +29,11 @@ exports.rejister = async (body) => {
                 contact_number: body.contact_number,
             });
             const userData = await Doctor.query().findOne({ user_id: newUser.id }).withGraphFetched('user');
-            return { status: 200, user: userData};
+            return {
+                status: 200,
+                message: 'Doctor created successfully',
+                user: userData
+            };
         } else if (body.role.toLowerCase() === 'patient') {
             await Patient.query().insert({
                 user_id: newUser.id,
@@ -38,7 +42,11 @@ exports.rejister = async (body) => {
                 contact_number: body.contact_number,
             });
             const userData = await Patient.query().findOne({ user_id: newUser.id }).withGraphFetched('user');
-            return { status: 200, user: userData};
+            return {
+                status: 200,
+                message: 'Patient created successfully',
+                user: userData
+            };
         } else {
             return { status: 400, message: 'Role not found' };
         }
@@ -62,6 +70,7 @@ exports.login = async (body) => {
         const token = jwt.sign({ id: user.id, email, password, roleId: user.role_id }, process.env.TOKEN_SECRET);
         return {
             status: 200,
+            message: 'Login successful',
             token,
             user
         };

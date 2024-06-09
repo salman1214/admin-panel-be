@@ -13,7 +13,9 @@ const logger = pino();
 
 // Middleware
 app.use(express.json());
-
+// allow cross-origin requests
+const cors = require('cors');
+app.use(cors());
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 

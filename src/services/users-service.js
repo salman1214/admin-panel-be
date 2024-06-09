@@ -4,12 +4,12 @@ const User = require("../models/User");
 
 exports.getAllUsers = async () => {
     try {
-        const doctors = await Doctor.query().withGraphFetched('user');
-        const patients = await Patient.query().withGraphFetched('user');
+        const users = await User.query().whereNot('role', 'admin').withGraphFetched('patient').withGraphFetched('doctor');
+
         return {
             status: 200,
             message: "All users fetched successfully",
-            users: [...doctors, ...patients]
+            users
         };
     } catch (err) {
         console.log("ERROR >>>>> ", err)

@@ -5,51 +5,37 @@
  */
 module.exports = {
 
-    development: {
-        client: 'sqlite3',
+    // development: {
+    //     client: 'sqlite3',
+    //     connection: {
+    //         filename: './dev.sqlite3'
+    //     },
+    //     useNullAsDefault: true,
+    //     migrations: {
+    //         directory: './migrations'
+    //     },
+    //     seeds: {
+    //         directory: './seeds'
+    //     }
+    // },
+
+    staging: {
+        client: process.env.DB_CLIENT,
         connection: {
-            filename: './dev.sqlite3'
+            // host: '127.0.0.1',
+            database: process.env.DATABASE,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
         },
-        useNullAsDefault: true,
+        pool: {
+            min: 2,
+            max: 10
+        },
         migrations: {
-            directory: './migrations'
+            tableName: 'knex_migrations'
         },
         seeds: {
             directory: './seeds'
         }
     },
-
-    staging: {
-        client: 'pg',
-        connection: {
-            host: '127.0.0.1',
-            database: 'hospital',
-            user: 'postgres',
-            password:'12345'
-        },
-        pool: {
-            min: 2,
-            max: 10
-        },
-        migrations: {
-            tableName: 'knex_migrations'
-        }
-    },
-
-    production: {
-        client: 'postgresql',
-        connection: {
-            database: process.env.POSTGRES_DB,
-            user: process.env.POSTGRES_USER,
-            password: process.env.POSTGRES_PASSWORD
-        },
-        pool: {
-            min: 2,
-            max: 10
-        },
-        migrations: {
-            tableName: 'knex_migrations'
-        }
-    }
-
 };

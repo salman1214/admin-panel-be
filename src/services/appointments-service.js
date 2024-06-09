@@ -16,11 +16,11 @@ exports.createAppointment = async (body) => {
 
 exports.getAllAppointments = async () => {
     try {
-        const appointments = await Appointment.query();
+        const appointments = await Appointment.query().withGraphFetched('[doctor.user, patient.user]');
         return {
             status: 200,
             message: "All appointments fetched successfully",
-            appointments
+            appointments: appointments
         };
     } catch (err) {
         console.log("ERROR >>>>> ", err)

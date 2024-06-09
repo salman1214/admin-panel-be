@@ -82,10 +82,17 @@
 
 /**
  * @swagger
- * /api/doctor/{id}:
+ * /api/users/doctor/{id}:
  *   patch:
  *     summary: Update a doctor
  *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The id of the user to retrieve
+ *         schema:
+ *           type: integer
  *     requestBody:
  *       required: true
  *       content:
@@ -105,10 +112,17 @@
 
 /**
  * @swagger
- * /api/patient/{id}:
+ * /api/users/patient/{id}:
  *   patch:
  *     summary: Update a patient
  *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The id of the user to retrieve
+ *         schema:
+ *           type: integer
  *     requestBody:
  *       required: true
  *       content:

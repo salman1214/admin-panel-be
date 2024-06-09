@@ -9,7 +9,7 @@ class Treatment extends Model {
 
     static get relationMappings() {
         return {
-            user: {
+            patient: {
                 relation: Model.BelongsToOneRelation,
                 modelClass: Patient,
                 join: {
@@ -17,11 +17,6 @@ class Treatment extends Model {
                     to: 'patients.id',
                 },
             },
-        };
-    }
-
-    static get relationMappings() {
-        return {
             prescription: {
                 relation: Model.HasOneRelation,
                 modelClass: Prescription,

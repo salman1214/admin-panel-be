@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const { rejister, login } = require('../services/auth-service');
+const { register, login } = require('../services/auth-service');
 const { sendErrorResp } = require('../utils/common-utils');
 
 router.post('/register', async (req, res) => {
-    rejister(req.body)
+    register(req.body)
         .then((result) => res.status(result.status).send(result))
         .catch((error) => {
             sendErrorResp(error, req, res);

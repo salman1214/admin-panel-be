@@ -1,5 +1,4 @@
 const { Model } = require('objection');
-const User = require('./User');
 
 class Patient extends Model {
     static get tableName() {
@@ -10,10 +9,18 @@ class Patient extends Model {
         return {
             user: {
                 relation: Model.BelongsToOneRelation,
-                modelClass: User,
+                modelClass: __dirname + '/User',
                 join: {
                     from: 'patients.user_id',
                     to: 'users.id',
+                },
+            },
+            appointment: {
+                relation: Model.HasManyRelation,
+                modelClass: __dirname + '/Appointment',
+                join: {
+                    from: 'patients.id',
+                    to: 'appointments.patient_id',
                 },
             },
         };
