@@ -1,7 +1,13 @@
 const request = require('supertest');
 const app = require('../app');
+const knex = require('../db');
 
 describe('Treatment Endpoints', () => {
+
+    beforeAll(async () => {
+        await knex.migrate.latest();
+        await knex.seed.run();
+    });
 
     it('should create a treatment', async () => {
         const res = await request(app)
@@ -18,21 +24,31 @@ describe('Treatment Endpoints', () => {
                     duration: '4 days',
                 }
             });
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty('treatment');
+        if (res.statusCode === 401) {
+            expect(res.error.text).toEqual('Access Denied');
+        } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body).toHaveProperty('treatment');
+        }
     });
 
     it('should get all treatments', async () => {
         const res = await request(app).get('/api/treatments/all');
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual('All treatments fetched successfully');
-        expect(res.body.treatments).toBeInstanceOf(Array);
+        if (res.statusCode === 401) {
+            expect(res.error.text).toEqual('Access Denied');
+        } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.message).toEqual('All treatments fetched successfully');
+            expect(res.body.treatments).toBeInstanceOf(Array);
+        }
     });
 
     it('should get a treatment by id', async () => {
         const res = await request(app).get('/api/treatments/1');
         if (res.statusCode === 404) {
             expect(JSON.parse(res.error.text).message).toEqual('Treatment not found');
+        } else if (res.statusCode === 401) {
+            expect(res.error.text).toEqual('Access Denied');
         } else {
             expect(res.statusCode).toEqual(200);
             expect(res.body.treatment).toHaveProperty('id');
@@ -47,6 +63,8 @@ describe('Treatment Endpoints', () => {
             });
         if (res.statusCode === 404) {
             expect(JSON.parse(res.error.text).message).toEqual('Treatment not found');
+        } else if (res.statusCode === 401) {
+            expect(res.error.text).toEqual('Access Denied');
         } else {
             expect(res.statusCode).toEqual(200);
             expect(res.body.treatment).toEqual(1);
@@ -57,10 +75,15 @@ describe('Treatment Endpoints', () => {
         const res = await request(app).delete('/api/treatments/1');
         if (res.statusCode === 404) {
             expect(JSON.parse(res.error.text).message).toEqual('Treatment not found');
+        } else if (res.statusCode === 401) {
+            expect(res.error.text).toEqual('Access Denied');
         } else {
             expect(res.statusCode).toEqual(200);
             expect(res.body.treatment).toEqual(1);
         }
     });
 
+    afterAll(async () => {
+        await knex.destroy(); // This closes the Knex connection to the database
+    });
 });

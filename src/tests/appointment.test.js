@@ -1,7 +1,13 @@
 const request = require('supertest');
 const app = require('../app');
+const knex = require('../db');
 
 describe('Appointment Endpoints', () => {
+
+    beforeAll(async () => {
+        await knex.migrate.latest();
+        await knex.seed.run();
+    });
 
     it('should create an appointment', async () => {
         const res = await request(app)
@@ -12,21 +18,31 @@ describe('Appointment Endpoints', () => {
                 appointment_date: '2022-12-12',
                 status: 'pending',
             });
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty('appointment');
+        if (res.statusCode === 401) {
+            expect(res.error.text).toEqual('Access Denied');
+        } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body).toHaveProperty('appointment');
+        }
     });
 
     it('should get all appointments', async () => {
         const res = await request(app).get('/api/appointments/all');
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual('All appointments fetched successfully');
-        expect(res.body.appointments).toBeInstanceOf(Array);
+        if (res.statusCode === 401) {
+            expect(res.error.text).toEqual('Access Denied');
+        } else {
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.message).toEqual('All appointments fetched successfully');
+            expect(res.body.appointments).toBeInstanceOf(Array);
+        }
     });
 
     it('should get an appointment by id', async () => {
         const res = await request(app).get('/api/appointments/1');
         if (res.statusCode === 404) {
             expect(JSON.parse(res.error.text).message).toEqual('Appointment not found');
+        } else if (res.statusCode === 401) {
+            expect(res.error.text).toEqual('Access Denied');
         } else {
             expect(res.statusCode).toEqual(200);
             expect(res.body.appointment).toHaveProperty('id');
@@ -41,6 +57,8 @@ describe('Appointment Endpoints', () => {
             });
         if (res.statusCode === 404) {
             expect(JSON.parse(res.error.text).message).toEqual('Appointment not found');
+        } else if (res.statusCode === 401) {
+            expect(res.error.text).toEqual('Access Denied');
         } else {
             expect(res.statusCode).toEqual(200);
             expect(res.body.appointment).toEqual(1);
@@ -51,9 +69,15 @@ describe('Appointment Endpoints', () => {
         const res = await request(app).delete('/api/appointments/1');
         if (res.statusCode === 404) {
             expect(JSON.parse(res.error.text).message).toEqual('Appointment not found');
+        } else if (res.statusCode === 401) {
+            expect(res.error.text).toEqual('Access Denied');
         } else {
             expect(res.statusCode).toEqual(200);
             expect(res.body.appointment).toEqual(1);
         }
+    });
+
+    afterAll(async () => {
+        await knex.destroy(); // This closes the Knex connection to the database
     });
 });

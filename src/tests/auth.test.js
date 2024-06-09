@@ -1,7 +1,14 @@
 const request = require('supertest');
 const app = require('../app');
+const knex = require('../db');
 
 describe('Auth Endpoints', () => {
+
+    beforeAll(async () => {
+        await knex.migrate.latest();
+        await knex.seed.run();
+    });
+    
     it('should register a new user', async () => {
         const res = await request(app)
             .post('/api/auth/register')
@@ -37,5 +44,9 @@ describe('Auth Endpoints', () => {
             expect(res.statusCode).toEqual(200);
             expect(res.header).toHaveProperty('authorization');
         }
+    });
+
+    afterAll(async () => {
+        await knex.destroy(); // This closes the Knex connection to the database
     });
 });

@@ -1,5 +1,3 @@
-const bcrypt = require('bcryptjs');
-
 exports.seed = async function (knex) {
   // Check if admin user already exists
   const adminUser = await knex('users')
@@ -8,6 +6,7 @@ exports.seed = async function (knex) {
 
   if (!adminUser) {
     // Hash the password
+    const bcrypt = require('bcryptjs');
     const hashedPassword = await bcrypt.hash('admin', 10); // Replace 'your_password' with the actual password
 
     // Insert the admin user
