@@ -67,7 +67,7 @@ exports.login = async (body) => {
         const validPass = await bcrypt.compare(password, user.password);
         if (!validPass) return { status: 400, message: 'Invalid password' };
 
-        const token = jwt.sign({ id: user.id, email, password, roleId: user.role_id }, process.env.TOKEN_SECRET);
+        const token = jwt.sign({ id: user.id, email, password, roleId: user.role_id }, "secret");
         return {
             status: 200,
             message: 'Login successful',

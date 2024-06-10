@@ -22,10 +22,11 @@ module.exports = {
     development: {
         client: 'postgresql',
         connection: {
-            // host: '127.0.0.1',
-            // database: 'hospital',
+            host: 'localhost',
+            database: 'postgres',
             user: 'postgres',
-            password:'12345'
+            password:'12345',
+            port: 3001
         },
         pool: {
             min: 2,
@@ -38,4 +39,22 @@ module.exports = {
             directory: './seeds'
         }
     },
+
+    test: {
+        client: 'postgresql',
+        connection: {
+            user: 'postgres',
+            password: '12345',
+        },
+        pool: {
+            min: 2,
+            max: 10
+        },
+        migrations: {
+            tableName: 'knex_migrations'
+        },
+        seeds: {
+            directory: './seeds'
+        }
+    }
 };

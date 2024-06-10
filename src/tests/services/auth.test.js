@@ -1,5 +1,5 @@
-const knex = require('../db');
-const authService = require('../services/auth-service');
+const knex = require('../../db');
+const authService = require('../../services/auth-service');
 
 describe('Auth Service', () => {
   beforeAll(async () => {
@@ -94,7 +94,6 @@ describe('Auth Service', () => {
       };
 
       const result = await authService.login(body);
-      console.log("RESSSSS -->> ", result)
 
       expect(result.status).toEqual(200);
       expect(result.message).toEqual('Login successful');
@@ -132,4 +131,4 @@ describe('Auth Service', () => {
   afterAll(async () => {
     await knex.destroy();
   });
-});
+})

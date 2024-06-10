@@ -13,7 +13,7 @@ const swaggerOptions = {
                 email: 'salmannaqvi461@gmail.com'
             },
         },
-        servers: [{ url: 'http://localhost:5000' }],
+        servers: [{ url: 'http://localhost:5001' }],
         components: {
             securitySchemes: {
                 bearerAuth: {
