@@ -22,17 +22,7 @@ jobs:
       - name: Create .env file
         run: |
           echo "PORT=5000" >> .env
-          echo "# Postgres" >> .env
-          echo "POSTGRES_HOST=127.0.0.1" >> .env
-          echo "POSTGRES_USER=postgres" >> .env
-          echo "POSTGRES_PASSWORD=1234" >> .env
-          echo "POSTGRES_DB=hospital" >> .env
-          echo "# mysql" >> .env
-          echo "MYSQL_HOST=localhost" >> .env
-          echo "MYSQL_ROOT_PASSWORD=12345" >> .env
-          echo "MYSQL_DATABASE=adminpanel" >> .env
-          echo "MYSQL_USER=root" >> .env
-          echo "MYSQL_PASSWORD=" >> .env
+          echo "BASE_URL=http://localhost:5000" >> .env
           echo "TOKEN_SECRET=secret" >> .env
 
       - name: Use Node.js ${{ matrix.node-version }}

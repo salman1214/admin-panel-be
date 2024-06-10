@@ -9,7 +9,7 @@ require('./db');
 
 const app = express();
 const logger = pino();
-// app.use(pinoHttp({ logger }));
+app.use(pinoHttp({ logger }));
 
 // Middleware
 app.use(express.json());
