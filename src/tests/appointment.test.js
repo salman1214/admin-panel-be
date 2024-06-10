@@ -78,6 +78,8 @@ describe('Appointment Endpoints', () => {
     });
 
     afterAll(async () => {
+        // clean up the database
+        await knex('appointments').del();
         await knex.destroy(); // This closes the Knex connection to the database
     });
 });

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "set PORT=5001 && jest",
+    "test": "set PORT=4000 && jest",
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "migrate": "npx knex migrate:latest --env staging"
